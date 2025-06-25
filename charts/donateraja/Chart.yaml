@@ -1,0 +1,4 @@
+apiVersion: v2
+name: donateraja
+version: 0.1.0
+description: Helm chart for Donateraja backend and frontend

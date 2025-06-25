@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: donateraja-backend-config
+  labels:
+    app: donateraja-backend
+data:
+  application.yaml: |-
+    {{ .Files.Get (printf "files/%s" .Values.backend.configFile) | nindent 4 }}

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: donateraja-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: donateraja-backend
+  template:
+    metadata:
+      labels:
+        app: donateraja-backend
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          env:
+            {{- range $key, $value := .Values.backend.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: donateraja-backend-secrets
+                  key: DB_PASSWORD
+            - name: JWT_SIGNING_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: donateraja-backend-secrets
+                  key: JWT_SIGNING_KEY
+            - name: MSG91_AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: donateraja-backend-secrets
+                  key: MSG91_AUTH_KEY
+            - name: BACKBLAZE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: donateraja-backend-secrets
+                  key: BACKBLAZE_KEY
+            - name: SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: donateraja-backend-secrets
+                  key: SUPERUSER_PASSWORD
+          envFrom:
+            - secretRef:
+                name: donateraja-backend-secrets
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config/application.yaml
+              subPath: application.yaml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: donateraja-backend-config

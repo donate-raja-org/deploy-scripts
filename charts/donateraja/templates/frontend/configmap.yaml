@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: donateraja-frontend-config
+  labels:
+    app: donateraja-frontend
+data:
+  config.json: |
+    {
+    {{- range $key, $value := .Values.frontend.config }}
+      "{{ $key }}": "{{ $value }}",
+    {{- end }}
+      "_comment": "Add more config as needed"
+    }

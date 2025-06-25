@@ -1,0 +1,27 @@
+# Default values for donateraja
+backend:
+  image:
+    repository: registry.gitlab.com/donateraja/donateraja-backend
+    tag: latest
+  env:
+    DB_URL: "jdbc:postgresql://ep-tiny-forest-a17k2xt8.ap-southeast-1.aws.neon.tech:5432/donateraja"
+    DB_USERNAME: "donateraja_owner"
+    # Add other non-sensitive config here
+  secrets:
+    DB_PASSWORD: ""
+    JWT_SIGNING_KEY: ""
+    MSG91_AUTH_KEY: ""
+    BACKBLAZE_KEY: ""
+    SUPERUSER_PASSWORD: ""
+  configFile: application.yaml  # You can change this to application-dev.yaml, application-prod.yaml, etc.
+ingress:
+  hosts:
+    - donateraja.com
+    - donateraja.in
+    - sharemadi.com
+frontend:
+  image:
+    repository: registry.gitlab.com/donateraja/donateraja-frontend
+    tag: latest
+  env: {}
+  config: {}

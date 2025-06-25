@@ -1,0 +1,4 @@
+# Dev environment application.yaml placeholder
+server:
+  port: 8080
+# ...add more dev config here...

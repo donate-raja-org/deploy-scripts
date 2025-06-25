@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Deploy to correct environment based on tag
+          command: |
+            if [[ "$CIRCLE_TAG" == *dev* ]]; then
+              echo "Deploying to dev environment"
+              bash deploy.sh dev
+            else
+              echo "Deploying to prod environment"
+              bash deploy.sh prod
+            fi
+
+workflows:
+  version: 2
+  deploy-on-tag:
+    jobs:
+      - deploy:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
